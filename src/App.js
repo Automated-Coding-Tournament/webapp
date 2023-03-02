@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
-
+import Login from './Login.js';
 const NavigationBar = styled.div`
   height: 30px;
   color: black;
@@ -20,8 +20,8 @@ const App = () => {
               element={<div>ACT Webapp</div>}
             />
             <Route
-              path='login'
-              element={<div>Login</div>}
+              path='Login'
+              element={<Login  />}
             />
             <Route
               path='register'
