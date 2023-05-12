@@ -11,3 +11,4 @@ export * from './popup';
 export * from './select';
 export * from './repeater';
 export * from './code-editor';
+export * from './task-score';
