@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme } from 'styled-components';
 
 const IconBase = (props) => {
-  const { height = 36, width = 36, color, children } = props;
+  const { height = 32, width = 32, color, children } = props;
   const theme = useTheme();
   return (
     <svg

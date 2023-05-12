@@ -1,16 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import profilePhoto from '../../assets/backgrounds/profile-page.png';
 import { Form } from '../../components';
 
 const Container = styled.div`
   height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
-  background-image: url(${profilePhoto});
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  overflow: auto;
+  background-color: ${(props) => props.theme.colors.StrongGray};
 `;
 
 const BigText = styled.h1`

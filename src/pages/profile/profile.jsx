@@ -6,7 +6,10 @@ import jwtDecode from 'jwt-decode';
 
 function Profile() {
   const token = localStorage.getItem('token');
-  const username = jwtDecode(token).username;
+  let username = null;
+  if (token) {
+    username = jwtDecode(token).username;
+  }
   const dataContext = useContext(DataContext);
   const [user, setUser] = useState(null);
 

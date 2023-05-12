@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import {
-  ContainedButton,
-  IconButton,
-  Logo,
-  MenuIcon,
-  OutlinedButton
-} from '..';
+import { IconButton, MenuIcon, OutlinedButton } from '..';
 import { useTheme } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
+import { DataContext } from '../../utils';
 
 const TopBar = styled.div`
   position: relative;
@@ -37,8 +33,12 @@ const TopBar = styled.div`
 const SideBar = styled.div`
   position: fixed;
   top: 52px;
-  height: calc(100% - 52px);
+  height: calc(100% - 54px);
   width: 300px;
+
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
 
   background-color: ${(props) => props.theme.colors.Black};
   background: linear-gradient(
@@ -58,14 +58,18 @@ const SideBar = styled.div`
     2;
 
   transition: all 0.25s ease-out;
-  transform: translateX(${(props) => `${props.isOpen ? 0 : -300}px`});
+  transform: translateX(${(props) => `${props.isOpen ? 0 : -316}px`});
+  z-index: 2;
 `;
 
 const MenuButtonContainer = styled.div`
   width='300px'
-`;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
 
-const LogoContainer = styled.div``;
+`;
 
 const NavigationButtonsContainer = styled.div`
   margin-top: auto;
@@ -74,12 +78,42 @@ const NavigationButtonsContainer = styled.div`
   width='300px'
 `;
 
+const SidebarButtonContainer = styled.div`
+  border: 1px solid ${(props) => props.theme.colors.White};
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: translateY(-3px);
+    background-color: ${(props) => props.theme.colors.White}4D;
+  }
+`;
+
+const Text = styled.span`
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: ${(props) => props.theme.fonts.Default};
+  color: ${(props) => props.theme.colors.White};
+`;
+
 const NavigationBar = (props) => {
   const token = localStorage.getItem('token');
-
+  let role = null;
+  if (token) {
+    role = jwtDecode(token).authorities;
+  }
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const dataContext = useContext(DataContext);
 
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
   const toggleSideBar = () => {
@@ -92,7 +126,7 @@ const NavigationBar = (props) => {
       message: 'See you soon!'
     });
     props.snackbarRef.current.show();
-
+    setSideBarIsOpen(false);
     navigate('/');
   };
 
@@ -100,27 +134,21 @@ const NavigationBar = (props) => {
     <>
       <TopBar id='topBar'>
         <MenuButtonContainer>
-          <IconButton onClick={() => toggleSideBar()}>
+          <IconButton onClick={() => token && toggleSideBar()}>
             <MenuIcon />
           </IconButton>
         </MenuButtonContainer>
-        <LogoContainer>
-          <Logo
-            height='52px'
-            width='104px'
-          />
-        </LogoContainer>
         <NavigationButtonsContainer>
           {!token && location.pathname === '/' && (
             <>
-              <ContainedButton
+              <OutlinedButton
                 value='Sign Up'
-                color={theme.colors.LightGreen}
+                color={theme.colors.PurpleBlue}
                 onClick={() => navigate('/register')}
               />
-              <ContainedButton
+              <OutlinedButton
                 value='Sign In'
-                color={theme.colors.SkyBlue}
+                color={theme.colors.PurpleBlue}
                 onClick={() => navigate('/login')}
               />
             </>
@@ -134,21 +162,7 @@ const NavigationBar = (props) => {
           )}
           {token && (
             <>
-              {!location.pathname.includes('/solve_task') && (
-                <ContainedButton
-                  value='Solve task'
-                  color={theme.colors.PurpleBlue}
-                  onClick={() => navigate('/solve_task/1')}
-                />
-              )}
-              {location.pathname !== '/create_task' && (
-                <ContainedButton
-                  value='Create task'
-                  color={theme.colors.PurpleBlue}
-                  onClick={() => navigate('/create_task')}
-                />
-              )}
-              <ContainedButton
+              <OutlinedButton
                 value='Profile'
                 color={theme.colors.PurpleBlue}
                 onClick={() => navigate('/profile')}
@@ -162,7 +176,26 @@ const NavigationBar = (props) => {
           )}
         </NavigationButtonsContainer>
       </TopBar>
-      <SideBar isOpen={sideBarIsOpen} />
+      <SideBar isOpen={sideBarIsOpen}>
+        <SidebarButtonContainer
+          onClick={() => {
+            toggleSideBar();
+            navigate('/tournaments');
+          }}
+        >
+          <Text>Tournaments</Text>
+        </SidebarButtonContainer>
+        {role && role !== dataContext.ROLES.USER && (
+          <SidebarButtonContainer
+            onClick={() => {
+              toggleSideBar();
+              navigate('/tasks');
+            }}
+          >
+            <Text>Tasks</Text>
+          </SidebarButtonContainer>
+        )}
+      </SideBar>
     </>
   );
 };

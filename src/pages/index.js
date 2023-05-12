@@ -4,5 +4,5 @@ export * from './login';
 export * from './registration';
 export * from './profile';
 export * from './contact-us';
-export * from './create-task';
-export * from './solve-task';
+export * from './task';
+export * from './tournament';

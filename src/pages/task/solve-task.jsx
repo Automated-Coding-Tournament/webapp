@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import CodeEditor from '../../components/code-editor/code-editor';
 import { DataContext, useFind, useSave } from '../../utils';
 import { ContainedButton, TextAreaInput } from '../../components';
-
+import { useNavigate } from 'react-router-dom';
 const Container = styled.div`
   height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
   background-color: ${(props) => props.theme.colors.StrongGray};
@@ -62,23 +62,24 @@ const SolveTask = () => {
   const token = localStorage.getItem('token');
   const dataContext = useContext(DataContext);
   const theme = useTheme();
-
+  const navigate = useNavigate();
   const { id } = useParams();
-
   const [code, setCode] = useState('');
   const [task, setTask] = useState({});
   const [footerText, setFooterText] = useState('');
-
+  const [isfinished, setFinished] = useState(false);
   const {
     response: getCodeResponse,
     loading: getcodeloading,
     find: getCode
   } = useFind(`${dataContext.API}/task/getCode/{id}`);
+
   const {
     response: getTaskResponse,
     loading: getTaskloading,
-    find: getTask
-  } = useFind(`${dataContext.API}/task/getTask/{id}`);
+    error: getTaskError,
+    find: nextTournamentTask
+  } = useFind(`${dataContext.API}/task/get/nextTournamentTask/${id}`);
   const {
     response: saveResponse,
     loading: saveloading,
@@ -86,22 +87,20 @@ const SolveTask = () => {
     save
   } = useSave(`${dataContext.API}/task/submitSolution/{id}`);
 
+  const { response: saveTournamentResponse, save: saveTournament } = useSave(
+    `${dataContext.API}/tournament/finish/${id}`
+  );
+
   useEffect(() => {
-    if (id) {
+    if (isfinished) {
       const config = {
         headers: {
           Authorization: token
         }
       };
-      const additionalURLParams = [
-        {
-          name: 'id',
-          value: id
-        }
-      ];
-      getCode(config, additionalURLParams);
+      saveTournament({}, config);
     }
-  }, [token, id]);
+  }, [isfinished]);
 
   useEffect(() => {
     if (id) {
@@ -110,15 +109,29 @@ const SolveTask = () => {
           Authorization: token
         }
       };
+      nextTournamentTask(config);
+    }
+  }, [token, id]);
+
+  useEffect(() => {
+    if (task.id) {
+      const config = {
+        headers: {
+          Authorization: token
+        },
+        params: {
+          tournamentId: id
+        }
+      };
       const additionalURLParams = [
         {
           name: 'id',
-          value: id
+          value: task.id
         }
       ];
-      getTask(config, additionalURLParams);
+      getCode(config, additionalURLParams);
     }
-  }, [token, id]);
+  }, [token, task.id]);
 
   useEffect(() => {
     if (getCodeResponse?.data) {
@@ -133,6 +146,12 @@ const SolveTask = () => {
       setFooterText('');
     }
   }, [getTaskResponse]);
+
+  useEffect(() => {
+    if (getTaskError?.response?.status === 404) {
+      setFinished(true);
+    }
+  }, [getTaskError]);
 
   useEffect(() => {
     if (saveError?.response?.status === 406) {
@@ -153,18 +172,27 @@ const SolveTask = () => {
         headers: {
           'Authorization': token,
           'Content-Type': 'text/plain'
+        },
+        params: {
+          tournamentId: id
         }
       };
       const additionalURLParams = [
         {
           name: 'id',
-          value: id
+          value: task.id
         }
       ];
       save(request, config, additionalURLParams);
       setFooterText('');
     }
-  }, [token, id, code]);
+  }, [token, task.id, code]);
+
+  useEffect(() => {
+    if (isfinished) {
+      navigate(-1);
+    }
+  }, [saveTournamentResponse]);
 
   useEffect(() => {
     if (saveResponse?.data) {
@@ -179,7 +207,6 @@ const SolveTask = () => {
       }
     }
   }, [saveResponse]);
-
   return (
     <Container topBar={topBar}>
       <PageContainer topBar={topBar}>

@@ -9,7 +9,9 @@ import {
   TextAreaInput,
   TextInput
 } from '../../components';
-import { DataContext, useSave } from '../../utils';
+import { DataContext, useFind, useSave, useUpdate } from '../../utils';
+import { useNavigate, useParams } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 const Container = styled.div`
   height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
@@ -123,15 +125,111 @@ const types = [
   }
 ];
 
-const CreateTask = (props) => {
+const TaskForm = (props) => {
   const dataContext = useContext(DataContext);
   const topBar = document.getElementById('topBar');
-  const [task, setTask] = useState(DefaultTask);
   const theme = useTheme();
+  const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  const { response, loading, error, save, clearError } = useSave(
-    `${dataContext.API}/task/create`
+  let role = null;
+  if (token) {
+    role = jwtDecode(token).authorities;
+  }
+
+  if (role && role === dataContext.ROLES.USER) {
+    navigate('/');
+  }
+
+  const { id } = useParams();
+
+  const [task, setTask] = useState(DefaultTask);
+
+  const {
+    response: saveResponse,
+    loading: saveloading,
+    save
+  } = useSave(`${dataContext.API}/task/create`);
+
+  const {
+    response: updateResponse,
+    loading: updateloading,
+    update
+  } = useUpdate(`${dataContext.API}/task/edit/{id}`);
+
+  const { response: getTaskResponse, find: getTask } = useFind(
+    `${dataContext.API}/task/getTask/{id}`
   );
+
+  useEffect(() => {
+    if (id && id !== 'new') {
+      const config = {
+        headers: {
+          Authorization: token
+        }
+      };
+      const additionalURLParams = [
+        {
+          name: 'id',
+          value: id
+        }
+      ];
+      getTask(config, additionalURLParams);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (getTaskResponse?.data) {
+      const task = getTaskResponse.data;
+      setTask({
+        title: {
+          value: task.title,
+          errorMessage: ''
+        },
+        description: {
+          value: task.description,
+          errorMessage: ''
+        },
+        points: {
+          value: task.points,
+          errorMessage: ''
+        },
+        methodName: {
+          value: task.methodName,
+          errorMessage: ''
+        },
+        language: {
+          value: task.language,
+          errorMessage: ''
+        },
+        returnType: {
+          value: task.returnType,
+          errorMessage: ''
+        },
+        methodArguments: task.methodArguments?.map((argument, index) => ({
+          name: {
+            value: argument,
+            errorMessage: ''
+          },
+          type: {
+            value: task.methodArgumentTypes[index],
+            errorMessage: ''
+          }
+        })),
+        testCases: task.inputOutput?.map((x) => ({
+          inputs: x[0].split(';').map((input, index) => ({
+            name: task.methodArguments[index],
+            type: task.methodArgumentTypes[index],
+            value: input,
+            errorMessage: ''
+          })),
+          output: {
+            value: x[1],
+            errorMessage: ''
+          }
+        }))
+      });
+    }
+  }, [getTaskResponse]);
 
   const handleChange = (e) => {
     if (e.target.name.startsWith('methodArguments')) {
@@ -188,22 +286,29 @@ const CreateTask = (props) => {
         }
       });
     }
-
-    if (error) {
-      clearError();
-    }
   };
 
   useEffect(() => {
-    if (response?.status === 201) {
+    if (saveResponse?.status === 201) {
       props.setSnackbar({
         color: theme.colors.DarkGreen,
-        message: 'Task creation succesful'
+        message: 'Task created'
       });
       props.snackbarRef.current.show();
-      setTask(DefaultTask);
+      navigate(-1);
     }
-  }, [response]);
+  }, [saveResponse]);
+
+  useEffect(() => {
+    if (updateResponse?.status === 200) {
+      props.setSnackbar({
+        color: theme.colors.DarkGreen,
+        message: 'Task updated'
+      });
+      props.snackbarRef.current.show();
+      navigate(-1);
+    }
+  }, [updateResponse]);
 
   const checkForErrors = () => {
     let hasErrors = false;
@@ -374,8 +479,17 @@ const CreateTask = (props) => {
           Authorization: token
         }
       };
-      console.log(request);
-      save(request, config);
+      if (id && id !== 'new') {
+        const additionalURLParams = [
+          {
+            name: 'id',
+            value: id
+          }
+        ];
+        update(request, config, additionalURLParams);
+      } else {
+        save(request, config);
+      }
     }
   };
 
@@ -467,7 +581,7 @@ const CreateTask = (props) => {
       <Form
         title='Create task'
         onSubmit={handleSubmit}
-        loading={loading}
+        saveloading={saveloading || updateloading}
       >
         <StackLayout>
           <FormGroup>
@@ -655,4 +769,4 @@ const CreateTask = (props) => {
   );
 };
 
-export default CreateTask;
+export default TaskForm;

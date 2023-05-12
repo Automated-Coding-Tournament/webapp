@@ -1,13 +1,17 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Button = styled.div`
   position: relative;
-  padding: 4px 8px 4px 8px;
+  padding: 2px 4px 2px 4px;
   cursor: pointer;
-  width: ${(props) => props.width || '36px'};
-  height: ${(props) => props.width || '36px'};
-  margin: 4px;
+  height: ${(props) => props.width || '32px'};
+
+  ${(props) =>
+    props.disabled &&
+    css`
+      pointer-events: none;
+    `}
 
   transition: all 0.2s;
 
@@ -21,12 +25,19 @@ const Button = styled.div`
 `;
 
 const IconButton = (props) => {
-  const { children, onClick, className, ...buttonProps } = props;
+  const {
+    children,
+    onClick,
+    className,
+    disabled = false,
+    ...buttonProps
+  } = props;
   return (
     <Button
       {...buttonProps}
       className={className}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </Button>

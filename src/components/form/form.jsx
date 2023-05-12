@@ -76,6 +76,7 @@ const Form = (props) => {
           {showSubmitButton && (
             <ContainedButton
               size='xs'
+              type='submit'
               value={submitButtonTitle || 'Submit'}
               color={submitButtonColor || theme.colors.PurpleBlue}
               icon={
@@ -87,12 +88,12 @@ const Form = (props) => {
               }
               iconPossition='right'
               loading={loading}
-              type='submit'
             />
           )}
           {showCancelButton && (
             <OutlinedButton
               size='xs'
+              type='reset'
               value={submitCancelTitle || 'Cancel'}
               color={submitCancelColor || theme.colors.PurpleBlue}
               onClick={() => navigate(-1)}

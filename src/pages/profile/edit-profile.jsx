@@ -3,16 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Form, TextInput } from '../../components';
 import { useUpdate, DataContext } from '../../utils';
-import profilePhoto from '../../assets/backgrounds/profile-page.png';
 
 const Container = styled.div`
   height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
-  background-image: url(${profilePhoto});
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  overflow: auto;
+  background-color: ${(props) => props.theme.colors.StrongGray};
 `;
 
 const EditProfile = () => {

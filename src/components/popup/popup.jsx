@@ -4,7 +4,6 @@ import { ContainedButton, OutlinedButton } from '../button';
 
 const Container = styled.div`
   position: fixed;
-  background: #00000050;
   width: 100%;
   height: 100vh;
   top: 0;
@@ -88,6 +87,7 @@ const Popup = (props) => {
                   value={item.name}
                   color={item.color || theme.colors.PurpleBlue}
                   onClick={item.onClick}
+                  loading={item.loading}
                 />
               ) : (
                 <ContainedButton
@@ -96,6 +96,7 @@ const Popup = (props) => {
                   value={item.name}
                   color={item.color || theme.colors.PurpleBlue}
                   onClick={item.onClick}
+                  loading={item.loading}
                 />
               )
             )}

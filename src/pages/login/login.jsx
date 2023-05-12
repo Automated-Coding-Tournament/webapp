@@ -1,18 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
-import credentialsPhoto from '../../assets/backgrounds/credentials-page.png';
 import { Form, PasswordInput, TextInput } from '../../components';
 import { useSave, DataContext } from '../../utils';
 
 const Container = styled.div`
   height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
-  background-image: url(${credentialsPhoto});
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  overflow: auto;
+  background-color: ${(props) => props.theme.colors.StrongGray};
 `;
 
 const Login = (props) => {

@@ -1,20 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
-import homePhoto from '../../assets/backgrounds/home-page.png';
+import { Logo } from '../../components';
 
 const Container = styled.div`
   height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
-  background-image: url(${homePhoto});
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  overflow: auto;
+  background-color: ${(props) => props.theme.colors.StrongGray};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Home = () => {
   const topBar = document.getElementById('topBar');
-  return <Container topBar={topBar} />;
+  return (
+    <Container topBar={topBar}>
+      <Logo
+        height='588px'
+        width='873px'
+      />
+    </Container>
+  );
 };
 
 export default Home;
