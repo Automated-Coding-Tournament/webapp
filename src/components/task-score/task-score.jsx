@@ -21,7 +21,7 @@ const PopupBase = styled.div`
   max-height: 70vh;
   margin-top: calc(100vh - 85vh - 20px);
   border-radius: 50px;
-  padding: 50px;
+  padding: 45px;
   border: 5px solid ${(props) => props.theme.colors.black};
   overflow: auto;
   text-align: center;
@@ -43,6 +43,7 @@ const TitleContainer = styled.div`
   font-size: 32px;
   font-weight: bold;
   font-family: ${(props) => props.theme.fonts.InriaSerif};
+  color: ${(props) => props.theme.colors.White};
 `;
 
 const ContentBase = styled.div`
@@ -55,8 +56,7 @@ const ContentBase = styled.div`
 
 const StatusMarkContainer = styled.div`
   display: flex;
-  width: 71px;
-  height: 73px;
+  height: 45px;
   padding-top: 10px;
 `;
 
@@ -72,23 +72,25 @@ const TaskResultTextContainer = styled.div`
   padding: 4px;
   font-size: 28px;
   font-family: ${(props) => props.theme.fonts.InriaSerif};
+  color: ${(props) => props.theme.colors.White};
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding: 4px;
+  padding: 12px;
+  gap: 45px;
 `;
 
 const TaskScore = (props) => {
   const {
-    title = "Task Completed!",
-    passed = true,
-    totalCount = 2,
-    passedCount= 1,
-    usedMomory = 24534,
-    averageCpu = 23,
-    points = 150,
+    title,
+    passed,
+    totalCount,
+    passedCount,
+    usedMomory,
+    averageCpu,
+    points,
     onContinue,
     onRetreat
   } = props;
@@ -99,8 +101,8 @@ const TaskScore = (props) => {
         <TitleContainer>{title}</TitleContainer>
         <ContentBase>
           <StatusMarkContainer>
-            {passed === true  && (<PassedIcon/>)}
-            {passed === false  && (<FailedIcon/>)}
+            {passed === true  && (<PassedIcon color={theme.colors.LightGreen}/>)}
+            {passed === false  && (<FailedIcon color={theme.colors.Red}/>)}
           </StatusMarkContainer>
           <InfoContainer>
             <TaskResultTextContainer>{"Passed :"}</TaskResultTextContainer>
@@ -121,16 +123,16 @@ const TaskScore = (props) => {
         </ContentBase>
         <ButtonContainer>
         <OutlinedButton
-                  size='m'
+                  size='md'
                   value="Retreat"
-                  color={theme.colors.PurpleBlue}
-                  onClick={onContinue}
+                  color={theme.colors.Black}
+                  onClick={onRetreat}
                 />
         <OutlinedButton
-                  size='m'
+                  size='md'
                   value="Continue"
-                  color={theme.colors.PurpleBlue}
-                  onClick={onRetreat}
+                  color={theme.colors.Black}
+                  onClick={onContinue}
                 />
         </ButtonContainer>
       </PopupBase>

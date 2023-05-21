@@ -5,7 +5,8 @@ import {
   Logo,
   OutlinedButton,
   Popup,
-  Repeater
+  Repeater,
+  TaskScore
 } from '../../components';
 import { useTheme } from 'styled-components';
 import { Select } from '../../components/select';
@@ -20,6 +21,11 @@ const UserInteface = () => {
   const [basePopupOpen, setBasePopupOpen] = useState(false);
   const toggleBasePopup = () => {
     setBasePopupOpen(!basePopupOpen);
+  };
+
+  const [taskScorePopUpOpen, setTaskScorePopUp] = useState(true);
+  const toggleTaskScorePopUp = () => {
+    setTaskScorePopUp(!taskScorePopUpOpen);
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +70,17 @@ const UserInteface = () => {
     items.splice(index, 1);
     setRepeaterItems(items);
   };
+
+  const handleRetreat = () => {
+    alert("Retreated");
+    toggleTaskScorePopUp();
+  };
+
+  const handleContinue = () => {
+    alert("Continue");
+    toggleTaskScorePopUp();
+  };
+
 
   return (
     <div>
@@ -199,6 +216,19 @@ const UserInteface = () => {
               color: theme.colors.LightGray
             }
           ]}
+        />
+      )}
+      {taskScorePopUpOpen && (
+        <TaskScore 
+          title ={"Task Completed!"}
+          passed = {true}
+          totalCount = {2}
+          passedCount= {1}
+          usedMomory = {24534}
+          averageCpu = {23}
+          points = {150}
+          onRetreat={handleRetreat} 
+          onContinue={handleContinue}
         />
       )}
     </div>
