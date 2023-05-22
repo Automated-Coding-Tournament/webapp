@@ -13,8 +13,9 @@ import {
   TaskForm,
   SolveTask,
   TournamentList,
-  Tournament
+  Tournament,
 } from './pages';
+import { Leaderboard } from './pages/leaderboard';
 import { DataContext } from './utils';
 import styled from 'styled-components';
 
@@ -126,6 +127,10 @@ const App = () => {
                   }
                 />
               </Route>
+              <Route
+                  path='leaderboard'
+                  element={<Leaderboard />}
+                />
             </Routes>
             <Snackbar
               ref={snackbarRef}

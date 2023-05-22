@@ -180,6 +180,14 @@ const NavigationBar = (props) => {
         <SidebarButtonContainer
           onClick={() => {
             toggleSideBar();
+            navigate('/leaderboard');
+          }}
+        >
+          <Text>Leaderboard</Text>
+        </SidebarButtonContainer>
+        <SidebarButtonContainer
+          onClick={() => {
+            toggleSideBar();
             navigate('/tournaments');
           }}
         >
