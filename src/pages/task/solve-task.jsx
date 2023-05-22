@@ -3,71 +3,106 @@ import styled, { useTheme } from 'styled-components';
 import { useParams } from 'react-router-dom';
 import CodeEditor from '../../components/code-editor/code-editor';
 import { DataContext, useFind, useSave } from '../../utils';
-import { ContainedButton, TextAreaInput } from '../../components';
+import { OutlinedButton, TextAreaInput } from '../../components';
 import { useNavigate } from 'react-router-dom';
+
 const Container = styled.div`
-  height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
   overflow: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  height: 92.7%;
 `;
 
 const PageContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   padding: 20px;
-  background: ${(props) => `${props.theme.colors.Black}E5`};
-  border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
-  border-radius: 40px;
   width: 90%;
-  height: 80%;
 `;
 
-const TitleContainer = styled.div`
-  hight: 50px;
+const ToolbarContainer = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const ToolbarItemsContainer = styled.div`
+  position: relative;
+  background: ${(props) => `${props.theme.colors.Black}E5`};
+  border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
+  border-radius: 10px;
+  margin: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const Title = styled.h1`
-  text-align: center;
   font-family: ${(props) => props.theme.fonts.Default};
   color: ${(props) => props.theme.colors.White};
-  margin: auto;
+  margin: 0;
+  padding-left: 16px;
 `;
 
-const DescriptionContainer = styled.div`
-  width: 80%;
-`;
-
-const EditorContainer = styled.div`
-  width: 80%;
-`;
-
-const FooterContainer = styled.div`
-  width: 80%;
+const ContenctContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const InfoContainer = styled.div`
+  position: relative;
+  background: ${(props) => `${props.theme.colors.Black}E5`};
+  border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
+  border-radius: 10px;
+  margin: 8px;
+`;
+
+const EditorContainer = styled.div`
+  position: relative;
+  background: ${(props) => `${props.theme.colors.Black}E5`};
+  border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
+  border-radius: 10px;
+  width: 60%;
+  margin: 8px;
+  padding: 16px;
+`;
+
+const UtilsContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 40%;
+  height: 100%;
+`;
+
+const ButtonsContainer = styled.div`
+  padding: 8px;
 `;
 
 const SolveTask = () => {
-  const topBar = document.getElementById('topBar');
   const token = localStorage.getItem('token');
   const dataContext = useContext(DataContext);
   const theme = useTheme();
   const navigate = useNavigate();
   const { id } = useParams();
+
   const [code, setCode] = useState('');
   const [task, setTask] = useState({});
   const [footerText, setFooterText] = useState('');
   const [isfinished, setFinished] = useState(false);
+
   const {
     response: getCodeResponse,
     loading: getcodeloading,
@@ -80,6 +115,7 @@ const SolveTask = () => {
     error: getTaskError,
     find: nextTournamentTask
   } = useFind(`${dataContext.API}/task/get/nextTournamentTask/${id}`);
+
   const {
     response: saveResponse,
     loading: saveloading,
@@ -208,45 +244,53 @@ const SolveTask = () => {
     }
   }, [saveResponse]);
   return (
-    <Container topBar={topBar}>
-      <PageContainer topBar={topBar}>
-        <TitleContainer>
-          <Title>{task.title || 'Title missing'}</Title>
-        </TitleContainer>
-        <DescriptionContainer>
-          <TextAreaInput
-            height='64px'
-            value={
-              getTaskloading
-                ? 'Loading...'
-                : task.description || 'Description missing'
-            }
-            disabled
-          />
-        </DescriptionContainer>
-        <EditorContainer>
-          <CodeEditor
-            value={getcodeloading ? 'Loading...' : code}
-            onChange={onChange}
-            height='40vh'
-          />
-        </EditorContainer>
-        <FooterContainer>
-          <ContainedButton
-            value='Submit'
-            size='md'
-            color={theme.colors.PurpleBlue}
-            onClick={handleSubmit}
-            loading={saveloading}
-          />
-          <DescriptionContainer>
-            <TextAreaInput
-              height='10vh'
-              value={saveloading ? 'Solving...' : footerText}
-              disabled
+    <Container>
+      <PageContainer>
+        <ToolbarContainer>
+          <ToolbarItemsContainer>
+            <Title>{task.title || 'Title missing'}</Title>
+            <ButtonsContainer>
+              <OutlinedButton
+                value='Submit'
+                size='md'
+                color={theme.colors.PurpleBlue}
+                onClick={handleSubmit}
+                loading={saveloading}
+              />
+            </ButtonsContainer>
+          </ToolbarItemsContainer>
+        </ToolbarContainer>
+        <ContenctContainer>
+          <EditorContainer>
+            <CodeEditor
+              value={getcodeloading ? 'Loading...' : code}
+              onChange={onChange}
+              height='65vh'
             />
-          </DescriptionContainer>
-        </FooterContainer>
+          </EditorContainer>
+          <UtilsContainer>
+            <InfoContainer>
+              <TextAreaInput
+                label='Description'
+                height='30vh'
+                value={
+                  getTaskloading
+                    ? 'Loading...'
+                    : task.description || 'Description missing'
+                }
+                disabled
+              />
+            </InfoContainer>
+            <InfoContainer>
+              <TextAreaInput
+                label='Output'
+                height='15vh'
+                value={saveloading ? 'Solving...' : footerText}
+                disabled
+              />
+            </InfoContainer>
+          </UtilsContainer>
+        </ContenctContainer>
       </PageContainer>
     </Container>
   );

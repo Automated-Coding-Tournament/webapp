@@ -6,8 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { DataContext, useFind } from '../../utils';
 
 const Container = styled.div`
-  height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: ${(props) => props.theme.colors.StrongGray};
+  background-size: cover;
+  overflow: auto;
+  height: 92.7%;
 `;
 
 const Userprofile = styled.div`
@@ -136,7 +142,6 @@ const TournamentTitleOfText = styled.div`
 `;
 
 function userprofile({ user }) {
-  const topBar = document.getElementById('topBar');
   const theme = useTheme();
   const navigate = useNavigate();
   const dataContext = useContext(DataContext);
@@ -191,7 +196,7 @@ function userprofile({ user }) {
   };
 
   return (
-    <Container topBar={topBar}>
+    <Container>
       <Form
         showSubmitButton={false}
         showCancelButton={false}

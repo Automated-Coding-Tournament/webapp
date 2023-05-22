@@ -16,6 +16,12 @@ import {
   Tournament
 } from './pages';
 import { DataContext } from './utils';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  position: relative;
+  height: 100vh;
+`;
 
 const App = () => {
   const dataContext = {
@@ -38,93 +44,95 @@ const App = () => {
   return (
     <DataContext.Provider value={dataContext}>
       <Theme>
-        <Router>
-          <NavigationBar
-            snackbarRef={snackbarRef}
-            setSnackbar={setSnackbar}
-          />
-          <Routes>
-            <Route path='/'>
-              <Route
-                index
-                element={<Home />}
-              />
-              <Route
-                path='login'
-                element={
-                  <Login
-                    snackbarRef={snackbarRef}
-                    setSnackbar={setSnackbar}
-                  />
-                }
-              />
-              <Route
-                path='register'
-                element={
-                  <Registration
-                    snackbarRef={snackbarRef}
-                    setSnackbar={setSnackbar}
-                  />
-                }
-              />
-              <Route
-                path='ui'
-                element={<UserInteface />}
-              />
-              <Route
-                path='tournament/:id'
-                element={
-                  <Tournament
-                    snackbarRef={snackbarRef}
-                    setSnackbar={setSnackbar}
-                  />
-                }
-              />
-              <Route
-                path='tournaments'
-                element={<TournamentList />}
-              />
-              <Route
-                path='profile'
-                element={<Profile />}
-              />
-              <Route
-                path='contact_us'
-                element={<Contact />}
-              />
-              <Route
-                path='profile/edit'
-                element={<EditProfile />}
-              />
-              <Route
-                path='tasks'
-                element={<TaskList />}
-              />
-              <Route
-                path='tasks/:id'
-                element={
-                  <TaskForm
-                    snackbarRef={snackbarRef}
-                    setSnackbar={setSnackbar}
-                  />
-                }
-              />
-              <Route
-                path='solve_task/:id'
-                element={
-                  <SolveTask
-                    snackbarRef={snackbarRef}
-                    setSnackbar={setSnackbar}
-                  />
-                }
-              />
-            </Route>
-          </Routes>
-          <Snackbar
-            ref={snackbarRef}
-            snackbar={snackbar}
-          />
-        </Router>
+        <Container>
+          <Router>
+            <NavigationBar
+              snackbarRef={snackbarRef}
+              setSnackbar={setSnackbar}
+            />
+            <Routes>
+              <Route path='/'>
+                <Route
+                  index
+                  element={<Home />}
+                />
+                <Route
+                  path='login'
+                  element={
+                    <Login
+                      snackbarRef={snackbarRef}
+                      setSnackbar={setSnackbar}
+                    />
+                  }
+                />
+                <Route
+                  path='register'
+                  element={
+                    <Registration
+                      snackbarRef={snackbarRef}
+                      setSnackbar={setSnackbar}
+                    />
+                  }
+                />
+                <Route
+                  path='ui'
+                  element={<UserInteface />}
+                />
+                <Route
+                  path='tournaments/:id'
+                  element={
+                    <Tournament
+                      snackbarRef={snackbarRef}
+                      setSnackbar={setSnackbar}
+                    />
+                  }
+                />
+                <Route
+                  path='tournaments'
+                  element={<TournamentList />}
+                />
+                <Route
+                  path='profile'
+                  element={<Profile />}
+                />
+                <Route
+                  path='contact_us'
+                  element={<Contact />}
+                />
+                <Route
+                  path='profile/edit'
+                  element={<EditProfile />}
+                />
+                <Route
+                  path='tasks'
+                  element={<TaskList />}
+                />
+                <Route
+                  path='tasks/:id'
+                  element={
+                    <TaskForm
+                      snackbarRef={snackbarRef}
+                      setSnackbar={setSnackbar}
+                    />
+                  }
+                />
+                <Route
+                  path='solve_task/:id'
+                  element={
+                    <SolveTask
+                      snackbarRef={snackbarRef}
+                      setSnackbar={setSnackbar}
+                    />
+                  }
+                />
+              </Route>
+            </Routes>
+            <Snackbar
+              ref={snackbarRef}
+              snackbar={snackbar}
+            />
+          </Router>
+        </Container>
       </Theme>
     </DataContext.Provider>
   );

@@ -5,12 +5,17 @@ import { Form, TextInput } from '../../components';
 import { useUpdate, DataContext } from '../../utils';
 
 const Container = styled.div`
-  height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: ${(props) => props.theme.colors.StrongGray};
+  background-size: cover;
+  overflow: auto;
+  height: 92.7%;
 `;
 
 const EditProfile = () => {
-  const topBar = document.getElementById('topBar');
   const token = localStorage.getItem('token');
   const location = useLocation();
   const user = location.state;
@@ -36,7 +41,7 @@ const EditProfile = () => {
   });
 
   const { response, loading, error, update } = useUpdate(
-    `${dataContext.API}/user/edit/${user.username}`
+    `${dataContext.API}/user/edit/${user?.username}`
   );
 
   useEffect(() => {
@@ -144,7 +149,7 @@ const EditProfile = () => {
   };
 
   return (
-    <Container topBar={topBar}>
+    <Container>
       <Form
         title='Edit profile'
         onSubmit={handleSubmit}

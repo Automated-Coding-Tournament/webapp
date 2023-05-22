@@ -3,8 +3,14 @@ import styled from 'styled-components';
 import { Form } from '../../components';
 
 const Container = styled.div`
-  height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: ${(props) => props.theme.colors.StrongGray};
+  background-size: cover;
+  overflow: auto;
+  height: 92.7%;
 `;
 
 const BigText = styled.h1`
@@ -38,9 +44,8 @@ const Row = styled.li`
 `;
 
 function Contact() {
-  const topBar = document.getElementById('topBar');
   return (
-    <Container topBar={topBar}>
+    <Container>
       <Form
         showSubmitButton={false}
         showCancelButton={false}

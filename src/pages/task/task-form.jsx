@@ -14,7 +14,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
 const Container = styled.div`
-  height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
   overflow: auto;
@@ -85,10 +84,6 @@ const DefaultTask = {
 
 const languages = [
   {
-    text: 'JavaScript',
-    value: 'javascript'
-  },
-  {
     text: 'Java',
     value: 'java'
   },
@@ -127,7 +122,6 @@ const types = [
 
 const TaskForm = (props) => {
   const dataContext = useContext(DataContext);
-  const topBar = document.getElementById('topBar');
   const theme = useTheme();
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -577,7 +571,7 @@ const TaskForm = (props) => {
   };
 
   return (
-    <Container topBar={topBar}>
+    <Container>
       <Form
         title='Create task'
         onSubmit={handleSubmit}

@@ -5,16 +5,14 @@ import { useContext, useEffect, useState } from 'react';
 import { DataContext, useFind } from '../../utils';
 
 const Container = styled.div`
-  height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
-  background-color: ${(props) => props.theme.colors.StrongGray};
-  background-size: cover;
-  overflow: auto;
-  padding: 20px;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
+  background-color: ${(props) => props.theme.colors.StrongGray};
+  background-size: cover;
+  overflow: auto;
+  height: 92.7%;
 `;
 
 const Tournament = (props) => {

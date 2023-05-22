@@ -2,6 +2,7 @@ import styled, { useTheme } from 'styled-components';
 import React, { useEffect, useCallback, useContext } from 'react';
 import { DataContext, useSave } from '../../utils';
 import { useParams, useNavigate } from 'react-router-dom';
+
 const CardContainer = styled.div`
   width: 600px;
   background: ${(props) => `${props.theme.colors.Black}E5`};

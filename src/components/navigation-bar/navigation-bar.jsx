@@ -10,7 +10,7 @@ const TopBar = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
-  height: 52px;
+  height: 7%;
   width: 100%;
   background-color: ${(props) => props.theme.colors.Black};
   background: linear-gradient(
@@ -132,7 +132,7 @@ const NavigationBar = (props) => {
 
   return (
     <>
-      <TopBar id='topBar'>
+      <TopBar>
         <MenuButtonContainer>
           <IconButton onClick={() => token && toggleSideBar()}>
             <MenuIcon />

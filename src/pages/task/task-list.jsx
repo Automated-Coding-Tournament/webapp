@@ -19,13 +19,14 @@ import { DataContext, Pluralize, useFind, useRemove } from '../../utils';
 import jwtDecode from 'jwt-decode';
 
 const Container = styled.div`
-  height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
-  background-color: ${(props) => props.theme.colors.StrongGray};
-  padding: 0px;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  background-color: ${(props) => props.theme.colors.StrongGray};
+  background-size: cover;
+  overflow: auto;
+  height: 92.7%;
 `;
 
 const Text = styled.p`
@@ -39,7 +40,6 @@ const ActionButtonsContainer = styled.div`
 `;
 
 const TaskList = () => {
-  const topBar = document.getElementById('topBar');
   const dataContext = useContext(DataContext);
   const token = localStorage.getItem('token');
   let role = null;
@@ -151,7 +151,7 @@ const TaskList = () => {
   };
 
   return (
-    <Container topBar={topBar}>
+    <Container>
       <DataTableContainer>
         <DataTableToolbar>
           <OutlinedButton

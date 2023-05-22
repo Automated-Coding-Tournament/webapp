@@ -5,12 +5,13 @@ import { Form, PasswordInput, TextInput } from '../../components';
 import { useSave, DataContext } from '../../utils';
 
 const Container = styled.div`
-  height: calc(100% - ${(props) => props.topBar?.offsetHeight || 0}px);
   background-color: ${(props) => props.theme.colors.StrongGray};
+  background-size: cover;
+  overflow: auto;
+  height: 92.7%;
 `;
 
 const Login = (props) => {
-  const topBar = document.getElementById('topBar');
   const dataContext = useContext(DataContext);
   const theme = useTheme();
   const navigate = useNavigate();
@@ -133,7 +134,7 @@ const Login = (props) => {
   };
 
   return (
-    <Container topBar={topBar}>
+    <Container>
       <Form
         title='Login'
         onSubmit={handleSubmit}

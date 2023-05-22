@@ -1,13 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useCodeMirror } from '@uiw/react-codemirror';
 import { material } from '@uiw/codemirror-theme-material';
-import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 
-const extensions = [javascript(), python(), java()];
+const extensions = [python(), java()];
 
-const CodeEditor = ({ value, onChange, height }) => {
+const CodeEditor = ({ value, onChange, height, width }) => {
   const editor = useRef();
 
   const { setContainer } = useCodeMirror({
@@ -15,6 +14,7 @@ const CodeEditor = ({ value, onChange, height }) => {
     extensions,
     theme: material,
     height: height || 'auto',
+    width: width || 'auto',
     value: value,
     onChange: onChange
   });
