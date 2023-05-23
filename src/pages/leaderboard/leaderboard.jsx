@@ -32,7 +32,7 @@ const Leaderboard = () => {
     response: findResponse,
     loading: findLoading,
     find
-  } = useFind(`${dataContext.API}/users/get/all`);
+  } = useFind(`${dataContext.API}/user/get/globalLeaderboard`);
 
   useEffect(() => {
     find({
@@ -57,6 +57,7 @@ const Leaderboard = () => {
         <DataTableItem>{index + 1}</DataTableItem>
         <DataTableItem>{leader.username}</DataTableItem>
         <DataTableItem>{leader.level}</DataTableItem>
+        <DataTableItem>{leader.points}</DataTableItem>
         {/*TODO: add participated tournaments count */}
       </DataTableRow>
     ));
@@ -77,6 +78,7 @@ const Leaderboard = () => {
               <DataTableItem>Ranking</DataTableItem>
               <DataTableItem>User Name</DataTableItem>
               <DataTableItem>Level</DataTableItem>
+              <DataTableItem>Points</DataTableItem>
             </DataTableRow>
           </DataTableHeader>
           <DataTableBody>{renderRows()}</DataTableBody>
