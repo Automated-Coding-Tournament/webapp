@@ -13,3 +13,4 @@ export * from './repeater';
 export * from './code-editor';
 export * from './task-score';
 export * from './data-table';
+export * from './rules';
