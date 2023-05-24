@@ -111,7 +111,7 @@ const TournamentList = () => {
   };
 
   const handleEdit = (id) => {
-    navigate(`/tournaments/${id}`);
+    navigate(`/tournament-form/${id}`);
   };
 
   const renderRows = () => {
@@ -176,7 +176,7 @@ const TournamentList = () => {
             <OutlinedButton
               value='Create tournament'
               color={theme.colors.BlazeBlue}
-              onClick={() => navigate('/tournaments/new')}
+              onClick={() => navigate('/tournament-form/new')}
             />
           )}
         </DataTableToolbar>

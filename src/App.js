@@ -14,7 +14,8 @@ import {
   SolveTask,
   TournamentList,
   Tournament,
-  TermsPage
+  TermsPage,
+  TournamentForm
 } from './pages';
 import { Leaderboard } from './pages/leaderboard';
 import { DataContext } from './utils';
@@ -104,6 +105,15 @@ const App = () => {
                 <Route
                   path='contact_us'
                   element={<Contact />}
+                />
+                <Route
+                  path='tournament-form/:id'
+                  element={
+                    <TournamentForm
+                      snackbarRef={snackbarRef}
+                      setSnackbar={setSnackbar}
+                    />
+                  }
                 />
                 <Route
                   path='profile/edit'
