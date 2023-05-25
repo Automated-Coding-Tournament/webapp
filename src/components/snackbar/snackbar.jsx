@@ -10,7 +10,7 @@ const SnackbarContainer = styled.div`
   bottom: 5%;
   transform: translate(-50%, -50%);
   height: 36px;
-  border-radius: 36px;
+  border-radius: 10px;
   background-color: ${(props) => props.color || props.theme.colors.PurpleBlue};
 
   ${(props) =>

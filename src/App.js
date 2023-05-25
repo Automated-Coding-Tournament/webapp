@@ -82,7 +82,7 @@ const App = () => {
                   element={<UserInteface />}
                 />
                 <Route
-                  path='tournaments/:id'
+                  path='tournament/:id'
                   element={
                     <Tournament
                       snackbarRef={snackbarRef}
@@ -107,7 +107,7 @@ const App = () => {
                   element={<Contact />}
                 />
                 <Route
-                  path='tournament-form/:id'
+                  path='tournaments/:id'
                   element={
                     <TournamentForm
                       snackbarRef={snackbarRef}
@@ -143,9 +143,9 @@ const App = () => {
                 />
               </Route>
               <Route
-                  path='leaderboard'
-                  element={<Leaderboard />}
-                />
+                path='leaderboard'
+                element={<Leaderboard />}
+              />
             </Routes>
             <Snackbar
               ref={snackbarRef}

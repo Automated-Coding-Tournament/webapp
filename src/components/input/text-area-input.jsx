@@ -43,7 +43,7 @@ const TextAreaField = styled.textarea`
       props.errorMessage
         ? props.theme.colors.Red
         : props.theme.colors.DarkGray};
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 8px;
   outline: none;
   resize: none;

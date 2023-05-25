@@ -2,6 +2,7 @@ import styled, { useTheme } from 'styled-components';
 import React, { useEffect, useCallback, useContext } from 'react';
 import { DataContext, useSave } from '../../utils';
 import { useParams, useNavigate } from 'react-router-dom';
+import { OutlinedButton } from '../../components';
 
 const CardContainer = styled.div`
   width: 600px;
@@ -65,20 +66,8 @@ const Difficulty = styled.p`
   margin-bottom: 5px;
 `;
 
-const Button = styled.button`
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: ${(props) => props.theme.colors.PurpleBlue};
-  color: ${(props) => props.theme.colors.White};
-  font-family: ${(props) => props.theme.fonts.Default};
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 20px;
-`;
-
 const TournamentCard = (props) => {
-  const { tournament, loading } = props;
+  const { tournament, loading, finishedParticipating } = props;
   const { id } = useParams();
   const dataContext = useContext(DataContext);
   const token = localStorage.getItem('token');
@@ -149,11 +138,20 @@ const TournamentCard = (props) => {
           <Description>{tournament?.description}</Description>
           {tournament?.status === dataContext.TOURNAMENT_STATUS.REGISTRATION &&
             !tournament?.registered && (
-              <Button onClick={handleRegister}>Register</Button>
+              <OutlinedButton
+                value='Register'
+                color={theme.colors.PurpleBlue}
+                onClick={handleRegister}
+              />
             )}
           {tournament?.status === dataContext.TOURNAMENT_STATUS.STARTED &&
-            tournament?.registered && (
-              <Button onClick={handleSolveTask}>Solve Task</Button>
+            tournament?.registered &&
+            !finishedParticipating && (
+              <OutlinedButton
+                value='Solve Task'
+                color={theme.colors.PurpleBlue}
+                onClick={handleSolveTask}
+              />
             )}
         </>
       )}

@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-
 const TournamentCardWrapper = styled.div`
   background: ${(props) => `${props.theme.colors.Black}E5`};
   border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -38,12 +37,10 @@ const TournamentCardInfo = styled.div`
   margin: 10px 0;
 `;
 
-
-
 const TournamentCardButton = styled.button`
   background-color: #007bff;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   color: #ffffff;
   cursor: pointer;
   font-size: 16px;
@@ -70,8 +67,6 @@ const TournamentTitleOfText = styled.div`
   font-weight: bold;
 `;
 
-
-
 const TournamentCard = (props) => {
   const {
     name,
@@ -84,22 +79,39 @@ const TournamentCard = (props) => {
   } = props;
 
   return (
-    
-      <TournamentCardWrapper>
-        <TournamentCardTitle>{name}</TournamentCardTitle>
-        <TournamentCardInfo>
-          <TournamentCardText> <TournamentTitleOfText>Start date:</TournamentTitleOfText>{startDate}</TournamentCardText>
-          <TournamentCardText><TournamentTitleOfText>End date: </TournamentTitleOfText>{endDate}</TournamentCardText>
-          <TournamentCardText> <TournamentTitleOfText>Difficulty: </TournamentTitleOfText>{difficulty}</TournamentCardText>
-          <TournamentCardText> <TournamentTitleOfText>Organizer: </TournamentTitleOfText> {creatorUser}</TournamentCardText>
-          <TournamentCardText> <TournamentTitleOfText>Status:</TournamentTitleOfText>{status}</TournamentCardText>
-        </TournamentCardInfo>
-        <TournamentCardButton onClick={onButtonClick}>
-          View more!
-        </TournamentCardButton>
-      </TournamentCardWrapper>
-   
+    <TournamentCardWrapper>
+      <TournamentCardTitle>{name}</TournamentCardTitle>
+      <TournamentCardInfo>
+        <TournamentCardText>
+          {' '}
+          <TournamentTitleOfText>Start date:</TournamentTitleOfText>
+          {startDate}
+        </TournamentCardText>
+        <TournamentCardText>
+          <TournamentTitleOfText>End date: </TournamentTitleOfText>
+          {endDate}
+        </TournamentCardText>
+        <TournamentCardText>
+          {' '}
+          <TournamentTitleOfText>Difficulty: </TournamentTitleOfText>
+          {difficulty}
+        </TournamentCardText>
+        <TournamentCardText>
+          {' '}
+          <TournamentTitleOfText>Organizer: </TournamentTitleOfText>{' '}
+          {creatorUser}
+        </TournamentCardText>
+        <TournamentCardText>
+          {' '}
+          <TournamentTitleOfText>Status:</TournamentTitleOfText>
+          {status}
+        </TournamentCardText>
+      </TournamentCardInfo>
+      <TournamentCardButton onClick={onButtonClick}>
+        View more!
+      </TournamentCardButton>
+    </TournamentCardWrapper>
   );
-}
+};
 
 export default TournamentCard;

@@ -48,11 +48,15 @@ const useSave = (url) => {
     [saveData]
   );
 
+  const clearResponse = useCallback(() => {
+    setResponse(null);
+  }, []);
+
   const clearError = useCallback(() => {
     setError(null);
   }, []);
 
-  return { response, loading, error, save, clearError };
+  return { response, loading, error, save, clearResponse, clearError };
 };
 
 export default useSave;

@@ -1,18 +1,28 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CodeEditor from '../../components/code-editor/code-editor';
 import { DataContext, useFind, useSave } from '../../utils';
-import { OutlinedButton, TextAreaInput } from '../../components';
-import { useNavigate } from 'react-router-dom';
+import {
+  OutlinedButton,
+  Popup,
+  TaskScore,
+  TextAreaInput
+} from '../../components';
+import background from '../../assets/backgrounds/background.png';
 
 const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url(${background});
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   overflow: auto;
   height: 92.7%;
 `;
@@ -99,58 +109,80 @@ const SolveTask = () => {
   const { id } = useParams();
 
   const [code, setCode] = useState('');
-  const [task, setTask] = useState({});
+  const [task, setTask] = useState(null);
+  const [participation, setParticipation] = useState(null);
   const [footerText, setFooterText] = useState('');
   const [isfinished, setFinished] = useState(false);
 
+  const [taskScorePopUpOpen, setTaskScorePopUpOpen] = useState(false);
+  const toggleTaskScorePopup = () => {
+    setTaskScorePopUpOpen(!taskScorePopUpOpen);
+  };
+
+  const [finishedPopUpOpen, setFinishedPopUpOpen] = useState(false);
+  const toggleFinishedPopup = () => {
+    setFinishedPopUpOpen(!finishedPopUpOpen);
+  };
+
   const {
     response: getCodeResponse,
-    loading: getcodeloading,
-    find: getCode
+    loading: getCodeLoading,
+    find: getCode,
+    clearResponse: getCodeClearResponse
   } = useFind(`${dataContext.API}/task/getCode/{id}`);
 
   const {
     response: getTaskResponse,
-    loading: getTaskloading,
-    error: getTaskError,
-    find: nextTournamentTask
-  } = useFind(`${dataContext.API}/task/get/nextTournamentTask/${id}`);
+    loading: getTaskLoading,
+    find: getTask,
+    clearResponse: getTaskClearResponse
+  } = useFind(`${dataContext.API}/task/get/participation/current/${id}`);
+
+  const {
+    response: getParticipationResponse,
+    loading: getParticipationloading,
+    find: getParticipation,
+    clearResponse: getParticipationClearResponse
+  } = useFind(`${dataContext.API}/tournament/get/participation/${id}`);
+
+  const {
+    response: nextTournamentTaskResponse,
+    loading: nextTournamentTaskLoading,
+    error: nextTournamentTaskError,
+    save: nextTournamentTask,
+    clearResponse: nextTournamentTaskClearResponse,
+    clearError: nextTournamentTaskClearError
+  } = useSave(`${dataContext.API}/task/tournament/next/${id}`);
 
   const {
     response: saveResponse,
     loading: saveloading,
     error: saveError,
-    save
+    save,
+    clearResponse: saveClearResponse
   } = useSave(`${dataContext.API}/task/submitSolution/{id}`);
 
-  const { response: saveTournamentResponse, save: saveTournament } = useSave(
-    `${dataContext.API}/tournament/finish/${id}`
-  );
+  const {
+    response: finishTournamentResponse,
+    loading: finishTournamentLoading,
+    save: finishTournament,
+    clearResponse: finishTournamentClearResponse
+  } = useSave(`${dataContext.API}/tournament/finish/${id}`);
 
   useEffect(() => {
-    if (isfinished) {
+    if (id && task === null) {
       const config = {
         headers: {
           Authorization: token
         }
       };
-      saveTournament({}, config);
+      getTask(config);
+      getParticipation(config);
     }
-  }, [isfinished]);
+  }, [task, token, id]);
 
   useEffect(() => {
-    if (id) {
-      const config = {
-        headers: {
-          Authorization: token
-        }
-      };
-      nextTournamentTask(config);
-    }
-  }, [token, id]);
-
-  useEffect(() => {
-    if (task.id) {
+    if (task?.id) {
       const config = {
         headers: {
           Authorization: token
@@ -167,12 +199,13 @@ const SolveTask = () => {
       ];
       getCode(config, additionalURLParams);
     }
-  }, [token, task.id]);
+  }, [token, task?.id]);
 
   useEffect(() => {
     if (getCodeResponse?.data) {
       setCode(getCodeResponse.data);
       setFooterText('');
+      getCodeClearResponse();
     }
   }, [getCodeResponse]);
 
@@ -180,14 +213,42 @@ const SolveTask = () => {
     if (getTaskResponse?.data) {
       setTask(getTaskResponse.data);
       setFooterText('');
+      getTaskClearResponse();
     }
   }, [getTaskResponse]);
 
   useEffect(() => {
-    if (getTaskError?.response?.status === 404) {
-      setFinished(true);
+    if (getParticipationResponse?.data) {
+      setParticipation(getParticipationResponse.data);
+      setFooterText('');
+      if (getParticipationResponse.data?.finishedParticipating) {
+        setFinished(true);
+      } else if (getParticipationResponse.data?.finishedCurrentTask) {
+        setTaskScorePopUpOpen(true);
+      }
+      getParticipationClearResponse();
     }
-  }, [getTaskError]);
+  }, [getParticipationResponse]);
+
+  useEffect(() => {
+    if (nextTournamentTaskResponse) {
+      if (nextTournamentTaskResponse?.status === 200) {
+        setTask(null);
+        toggleTaskScorePopup();
+      }
+      nextTournamentTaskClearResponse();
+    }
+  }, [nextTournamentTaskResponse]);
+
+  useEffect(() => {
+    if (nextTournamentTaskError) {
+      if (nextTournamentTaskError.response?.status === 400) {
+        toggleTaskScorePopup();
+        toggleFinishedPopup();
+      }
+      nextTournamentTaskClearError();
+    }
+  }, [nextTournamentTaskError]);
 
   useEffect(() => {
     if (saveError?.response?.status === 406) {
@@ -222,33 +283,68 @@ const SolveTask = () => {
       save(request, config, additionalURLParams);
       setFooterText('');
     }
-  }, [token, task.id, code]);
+  }, [token, task?.id, code]);
 
   useEffect(() => {
     if (isfinished) {
-      navigate(-1);
+      navigate(`/tournament/${id}`);
     }
-  }, [saveTournamentResponse]);
+  }, [isfinished]);
+
+  useEffect(() => {
+    if (finishTournamentResponse?.status === 200) {
+      finishTournamentClearResponse();
+      navigate(`/tournament/${id}`);
+    }
+  }, [finishTournamentResponse]);
 
   useEffect(() => {
     if (saveResponse?.data) {
-      if (saveResponse.data.passed) {
-        setFooterText(
-          `Congratulations! All tests passed. You recieve ${task.points} points.`
-        );
-      } else {
-        setFooterText(
-          `${saveResponse.data.passedTestCases} out of ${saveResponse.data.totalTestCases} test cases passed.`
-        );
-      }
+      const config = {
+        headers: {
+          Authorization: token
+        }
+      };
+      getParticipation(config);
+      toggleTaskScorePopup();
+      saveClearResponse();
     }
   }, [saveResponse]);
+
+  const handleContinue = (passed) => {
+    if (passed) {
+      const config = {
+        headers: {
+          Authorization: token
+        }
+      };
+      nextTournamentTask({}, config);
+    } else {
+      const config = {
+        headers: {
+          Authorization: token
+        }
+      };
+      getParticipation(config);
+      toggleTaskScorePopup();
+    }
+  };
+
+  const handleRetreat = () => {
+    const config = {
+      headers: {
+        Authorization: token
+      }
+    };
+    finishTournament({}, config);
+  };
+
   return (
     <Container>
       <PageContainer>
         <ToolbarContainer>
           <ToolbarItemsContainer>
-            <Title>{task.title || 'Title missing'}</Title>
+            <Title>{task?.title || 'Title missing'}</Title>
             <ButtonsContainer>
               <OutlinedButton
                 value='Submit'
@@ -263,7 +359,7 @@ const SolveTask = () => {
         <ContenctContainer>
           <EditorContainer>
             <CodeEditor
-              value={getcodeloading ? 'Loading...' : code}
+              value={getCodeLoading ? 'Loading...' : code}
               onChange={onChange}
               height='65vh'
             />
@@ -274,9 +370,9 @@ const SolveTask = () => {
                 label='Description'
                 height='30vh'
                 value={
-                  getTaskloading
+                  getTaskLoading || getParticipationloading
                     ? 'Loading...'
-                    : task.description || 'Description missing'
+                    : task?.description || 'Description missing'
                 }
                 disabled
               />
@@ -292,6 +388,32 @@ const SolveTask = () => {
           </UtilsContainer>
         </ContenctContainer>
       </PageContainer>
+      {taskScorePopUpOpen && (
+        <TaskScore
+          title={'Task Completed!'}
+          passed={participation?.passed}
+          totalCount={participation?.totalTestCases}
+          passedCount={participation?.passedTestCases}
+          usedMomory={participation?.memoryInKilobytes}
+          averageCpu={participation?.averageCpuTime}
+          points={participation?.points}
+          onRetreat={handleRetreat}
+          onRetreatLoading={finishTournamentLoading}
+          onRetreatButtonVisible={
+            !(participation?.passed && participation?.lastTask)
+          }
+          onContinue={() => handleContinue(participation?.passed)}
+          onContinueLoading={nextTournamentTaskLoading}
+        />
+      )}
+      {finishedPopUpOpen && (
+        <Popup
+          title='Congratulations!'
+          message='You have successfully solved all the tasks!'
+          closeButtonColor={theme.colors.PurpleBlue}
+          onClose={handleRetreat}
+        />
+      )}
     </Container>
   );
 };

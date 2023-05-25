@@ -17,20 +17,27 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { DataContext, Pluralize, useFind, useRemove } from '../../utils';
 import jwtDecode from 'jwt-decode';
+import background from '../../assets/backgrounds/background.png';
 
 const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url(${background});
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   overflow: auto;
   height: 92.7%;
 `;
 
 const Text = styled.p`
   color: ${(props) => props.theme.colors.White};
+  font-weight: bold;
 `;
 
 const ActionButtonsContainer = styled.div`
@@ -111,7 +118,7 @@ const TournamentList = () => {
   };
 
   const handleEdit = (id) => {
-    navigate(`/tournament-form/${id}`);
+    navigate(`/tournaments/${id}`);
   };
 
   const renderRows = () => {
@@ -119,7 +126,11 @@ const TournamentList = () => {
       <DataTableRow
         key={tournament.id}
         clickable={true}
-        onClick={() => navigate(`/tournaments/${tournament.id}`)}
+        onClick={(e) => {
+          if (e.target.nodeName === 'TD') {
+            navigate(`/tournament/${tournament.id}`);
+          }
+        }}
       >
         <DataTableItem>{tournament.name}</DataTableItem>
         <DataTableItem>{tournament.startDate}</DataTableItem>
@@ -141,7 +152,13 @@ const TournamentList = () => {
                 onClick={() => handleEdit(tournament.id)}
               >
                 <EditIcon
-                  color={!tournament.mutable && theme.colors.StrongGray}
+                  color={
+                    tournament.status !==
+                      dataContext.TOURNAMENT_STATUS.REGISTRATION ||
+                    removeLoading
+                      ? theme.colors.StrongGray
+                      : theme.colors.WarmWhite
+                  }
                 />
               </IconButton>
               <IconButton
@@ -156,8 +173,11 @@ const TournamentList = () => {
               >
                 <DeleteIcon
                   color={
-                    (!tournament.mutable || removeLoading) &&
-                    theme.colors.StrongGray
+                    tournament.status !==
+                      dataContext.TOURNAMENT_STATUS.REGISTRATION ||
+                    removeLoading
+                      ? theme.colors.StrongGray
+                      : theme.colors.WarmWhite
                   }
                 />
               </IconButton>
@@ -176,7 +196,7 @@ const TournamentList = () => {
             <OutlinedButton
               value='Create tournament'
               color={theme.colors.BlazeBlue}
-              onClick={() => navigate('/tournament-form/new')}
+              onClick={() => navigate('/tournaments/new')}
             />
           )}
         </DataTableToolbar>
@@ -211,7 +231,7 @@ const TournamentList = () => {
       {deletePopupOpen && (
         <Popup
           title='Confirm'
-          message={`You are about to delete a tournaments. Do you wish to continue?`}
+          message={`You are about to delete a tournament. Do you wish to continue?`}
           closeButtonColor={theme.colors.BlazeBlue}
           onClose={toggleDeletePopup}
           buttons={[

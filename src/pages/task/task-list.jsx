@@ -17,20 +17,27 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { DataContext, Pluralize, useFind, useRemove } from '../../utils';
 import jwtDecode from 'jwt-decode';
+import background from '../../assets/backgrounds/background.png';
 
 const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url(${background});
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   overflow: auto;
   height: 92.7%;
 `;
 
 const Text = styled.p`
   color: ${(props) => props.theme.colors.White};
+  font-weight: bold;
 `;
 
 const ActionButtonsContainer = styled.div`

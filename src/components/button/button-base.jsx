@@ -20,7 +20,7 @@ const Button = styled.button`
   }};
   height: 32px;
   margin: 4px;
-  border-radius: 36px;
+  border-radius: 10px;
   background: ${(props) => props.theme.colors.Default};
 
   transition: all 0.2s;

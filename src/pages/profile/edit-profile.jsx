@@ -3,14 +3,20 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Form, TextInput } from '../../components';
 import { useUpdate, DataContext } from '../../utils';
+import background from '../../assets/backgrounds/background.png';
 
 const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url(${background});
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   overflow: auto;
   height: 92.7%;
 `;

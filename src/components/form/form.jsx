@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import styled, { useTheme } from 'styled-components';
 import { ContainedButton, OutlinedButton } from '../button';
-import { ArrowRightIcon } from '../icons';
 
 const FormContainer = styled.div`
   display: flex;
@@ -30,7 +29,7 @@ const FormElement = styled.form`
   background: ${(props) => `${props.theme.colors.Black}E5`};
   border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
   padding: 20px;
-  border-radius: 40px;
+  border-radius: 10px;
 `;
 
 const Title = styled.h1`
@@ -79,14 +78,6 @@ const Form = (props) => {
               type='submit'
               value={submitButtonTitle || 'Submit'}
               color={submitButtonColor || theme.colors.PurpleBlue}
-              icon={
-                <ArrowRightIcon
-                  color={theme.colors.Black}
-                  height={24}
-                  width={24}
-                />
-              }
-              iconPossition='right'
               loading={loading}
             />
           )}

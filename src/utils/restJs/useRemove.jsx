@@ -47,11 +47,15 @@ const useRemove = (url) => {
     [deleteData]
   );
 
+  const clearResponse = useCallback(() => {
+    setResponse(null);
+  }, []);
+
   const clearError = useCallback(() => {
     setError(null);
   }, []);
 
-  return { response, loading, error, remove, clearError };
+  return { response, loading, error, remove, clearResponse, clearError };
 };
 
 export default useRemove;

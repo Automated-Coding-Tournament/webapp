@@ -12,10 +12,16 @@ import {
 import { DataContext, useFind, useSave, useUpdate } from '../../utils';
 import { useNavigate, useParams } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
+import background from '../../assets/backgrounds/background.png';
 
 const Container = styled.div`
+  background-image: url(${background});
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   overflow: auto;
 `;
 
@@ -573,7 +579,7 @@ const TaskForm = (props) => {
   return (
     <Container>
       <Form
-        title='Create task'
+        title={id && id !== 'new' ? 'Edit task' : 'Create task'}
         onSubmit={handleSubmit}
         saveloading={saveloading || updateloading}
       >

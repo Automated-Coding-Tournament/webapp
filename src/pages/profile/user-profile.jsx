@@ -1,155 +1,85 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useTheme } from 'styled-components';
-import { ContainedButton, Form } from '../../components';
+import styled, { css } from 'styled-components';
+// import { useTheme } from 'styled-components';
+import {
+  DataTable,
+  DataTableBody,
+  DataTableContainer,
+  DataTableHeader,
+  DataTableItem,
+  DataTableRow,
+  Form,
+  TextInput
+} from '../../components';
 import { useNavigate } from 'react-router-dom';
-import { DataContext, useFind } from '../../utils';
+import { DataContext, Pluralize, useFind } from '../../utils';
+import background from '../../assets/backgrounds/background.png';
 
 const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url(${background});
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   overflow: auto;
   height: 92.7%;
 `;
 
-const Userprofile = styled.div`
+const PageContainer = styled.div`
+  position: relative;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  width: 500px;
-  font-family: ${(props) => props.theme.fonts.Default};
-  color: ${(props) => props.theme.colors.White};
-`;
-
-const Userinfo = styled.div`
-  font-size: 1.2rem;
-  line-height: 1.5;
-  font-color: white;
-  margin-left: 1px;
-  display: flex;
-  flex-wrap: wrap;
-`;
-const UserInfoColumn = styled.div`
-  flex: 1;
-`;
-
-const Points = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: right;
-  background-color: ${(props) => props.theme.colors.React};
-  color: ${(props) => props.theme.colors.White};
-  font-family: ${(props) => props.theme.fonts.Default};
-  font-size: 1.5rem;
-  font-weight: bold;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const Circle = styled.div`
-  height: 50px;
-  width: 100%;
-  float: left;
-  display: flex;
-  border-radius: 40px;
-  border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
-  font-family: ${(props) => props.theme.fonts.Default};
-  color: ${(props) => props.theme.colors.White};
-`;
-
-const CircleText = styled.div`
-  display: flex;
-  font-size: 25px;
-  font-weight: bold;
-  padding-top: 10px;
-  font-family: ${(props) => props.theme.fonts.Default};
-  color: ${(props) => props.theme.colors.White};
-  margin-left: 50px;
-`;
-
-const Sponsor = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: center;
-  border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
-  color: ${(props) => props.theme.colors.White};
-  font-family: ${(props) => props.theme.fonts.Default};
-  font-size: 1.2rem;
-  padding: 10px;
-  margin-top: 20px;
-  border-radius: 40px;
-`;
-
-const TournamentCardWrapper = styled.div`
-  background: ${(props) => `${props.theme.colors.Black}E5`};
-  border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
-  width: 100%; // Updated width to 100%
-  margin: 10px 0; // Updated margin to remove horizontal margin
-  transition: all 0.3s;
-
-  &:hover {
-    box-shadow: 0 8px 16px ${(props) => props.theme.colors.BlazeBlue};
-    transform: translateY(-5px);
-  }
-`;
-
-const TournamentCardTitle = styled.h2`
-  margin: 0;
-  font-size: 28px;
-  font-weight: bold;
-  color: #ffffff;
-`;
-
-const TournamentCardInfo = styled.div`
-  display: flex;
   justify-content: space-between;
   width: 100%;
-  font-size: 16px;
-  color: #ffffff;
-  margin: 10px 0;
+  height: 100%;
 `;
 
-const TournamentGrid = styled.div`
+const InfoContainer = styled.div`
+  position: relative;
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin: 0 auto;
-  max-width: 1000px; // Adjust this value to fit two cards in a row
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 100%;
 `;
 
-const TournamentCardText = styled.p`
-  margin: 10px 0;
-  font-size: 16px;
-  color: #ffffff;
+const TournamentHistoryContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 100%;
 `;
 
-const TournamentTitleOfText = styled.div`
+const Text = styled.p`
+  color: ${(props) => props.theme.colors.White};
+  ${(props) =>
+    props.fontSize
+      ? css`
+          font-size: ${props.fontSize};
+        `
+      : null};
   font-weight: bold;
 `;
 
-function userprofile({ user }) {
-  const theme = useTheme();
+const UserProfile = ({ user }) => {
+  // const theme = useTheme();
   const navigate = useNavigate();
   const dataContext = useContext(DataContext);
-  const [tournament, setTournament] = useState(null);
-  const { response, find } = useFind(
+  const [tournaments, setTournaments] = useState(null);
+  const { response, loading, find } = useFind(
     `${dataContext.API}/tournament/get/history`
   );
   const token = localStorage.getItem('token');
+
   useEffect(() => {
     find({
       headers: {
@@ -157,97 +87,142 @@ function userprofile({ user }) {
       }
     });
   }, []);
+
   useEffect(() => {
     if (response?.data) {
-      setTournament(response.data);
+      setTournaments(response.data);
     }
   }, [response]);
-  // TournamentCard component
-  const TournamentCard = (props) => {
-    const { name, startDate, endDate, difficulty, status, creatorUser } = props;
 
-    return (
-      <TournamentCardWrapper>
-        <TournamentCardTitle>{name}</TournamentCardTitle>
-        <TournamentCardInfo>
-          <TournamentCardText>
-            <TournamentTitleOfText>Start date:</TournamentTitleOfText>
-            {startDate}
-          </TournamentCardText>
-          <TournamentCardText>
-            <TournamentTitleOfText>End date: </TournamentTitleOfText>
-            {endDate}
-          </TournamentCardText>
-          <TournamentCardText>
-            <TournamentTitleOfText>Difficulty: </TournamentTitleOfText>
-            {difficulty}
-          </TournamentCardText>
-          <TournamentCardText>
-            <TournamentTitleOfText>Organizer: </TournamentTitleOfText>
-            {creatorUser}
-          </TournamentCardText>
-          <TournamentCardText>
-            <TournamentTitleOfText>Status:</TournamentTitleOfText>
-            {status}
-          </TournamentCardText>
-        </TournamentCardInfo>
-      </TournamentCardWrapper>
-    );
+  const renderTournamentsRows = () => {
+    return tournaments?.map((tournament) => (
+      <DataTableRow
+        key={tournament.id}
+        clickable={true}
+        onClick={() => navigate(`/tournament/${tournament.id}`)}
+      >
+        <DataTableItem>{tournament.name}</DataTableItem>
+        <DataTableItem>{tournament.startDate}</DataTableItem>
+        <DataTableItem>{tournament.endDate}</DataTableItem>
+        <DataTableItem>{tournament.difficulty}</DataTableItem>
+        <DataTableItem>{tournament.creatorUser?.username}</DataTableItem>
+        <DataTableItem>{tournament.status}</DataTableItem>
+      </DataTableRow>
+    ));
   };
 
   return (
     <Container>
-      <Form
-        showSubmitButton={false}
-        showCancelButton={false}
-      >
-        <Circle>
-          <CircleText>{user?.level}</CircleText>
-        </Circle>
-        <Points>Points: {user?.points}</Points>
-        {user?.role === 'ROLE_SPONSOR' ? (
-          <Sponsor>Sponsor</Sponsor>
-        ) : (
-          <Sponsor>Programmer</Sponsor>
-        )}
-        <Userprofile>
-          <Userinfo>
-            <UserInfoColumn>
-              <h1>
-                {user?.name} {user?.surname}
-              </h1>
-              <p>Username: {user?.username}</p>
-              <p>Email: {user?.email}</p>
-              <p>Phone number: {user?.phoneNumber}</p>
-            </UserInfoColumn>
-          </Userinfo>
-        </Userprofile>
-        <ContainedButton
-          value='Edit Profile'
-          color={theme.colors.PurpleBlue}
-          onClick={() => navigate('/profile/edit', { state: user })}
-        ></ContainedButton>
-      </Form>
-      <TournamentGrid>
-        <TournamentCardTitle>Turnyrų istorija</TournamentCardTitle>
-        {tournament &&
-          tournament.map((t, index) => (
-            <TournamentCard
-              key={index}
-              name={t.name}
-              startDate={t.startDate}
-              endDate={t.endDate}
-              difficulty={t.difficulty}
-              status={t.status}
-              creatorUser={t.creatorUser.username}
-              onButtonClick={() => {
-                // handleButtonClick logic
-              }}
-            />
-          ))}
-      </TournamentGrid>
+      <PageContainer>
+        <InfoContainer>
+          <Container>
+            <Form
+              title={`${user?.name} ${user?.surname}`}
+              onSubmit={() => navigate('/profile/edit', { state: user })}
+              submitButtonTitle='Edit'
+              showCancelButton={false}
+            >
+              {user?.username ? (
+                <TextInput
+                  label='Username'
+                  name='username'
+                  size='lg'
+                  value={user?.username}
+                  disabled
+                />
+              ) : null}
+              {user?.email ? (
+                <TextInput
+                  label='Email'
+                  name='email'
+                  size='lg'
+                  value={user?.email}
+                  disabled
+                />
+              ) : null}
+              {user?.phoneNumber ? (
+                <TextInput
+                  label='Phone'
+                  name='phoneNumber'
+                  size='lg'
+                  value={user?.phoneNumber}
+                  disabled
+                />
+              ) : null}
+              {user?.role === dataContext.ROLES.SPONSOR ? (
+                <TextInput
+                  label='Role'
+                  name='role'
+                  size='lg'
+                  value='Sponsor'
+                  disabled
+                />
+              ) : user?.role === dataContext.ROLES.USER ? (
+                <TextInput
+                  label='Role'
+                  name='role'
+                  size='lg'
+                  value='Programmer'
+                  disabled
+                />
+              ) : user?.role === dataContext.ROLES.USER ? (
+                <TextInput
+                  label='Role'
+                  name='role'
+                  size='lg'
+                  value='Admin'
+                  disabled
+                />
+              ) : null}
+              {user?.role === dataContext.ROLES.USER && (
+                <>
+                  <TextInput
+                    label='Points'
+                    name='points'
+                    size='lg'
+                    value={user?.points}
+                    disabled
+                  />
+                  <TextInput
+                    label='Level'
+                    name='level'
+                    size='lg'
+                    value={user?.level}
+                    disabled
+                  />
+                </>
+              )}
+            </Form>
+          </Container>
+        </InfoContainer>
+        <TournamentHistoryContainer>
+          <Text fontSize='26px'>Tournament History</Text>
+          <DataTableContainer>
+            <DataTable
+              loading={loading}
+              noDataVisible={!tournaments || tournaments?.length === 0}
+            >
+              <DataTableHeader>
+                <DataTableRow
+                  borderSize='0px'
+                  hovarable={false}
+                >
+                  <DataTableItem>Title</DataTableItem>
+                  <DataTableItem>Start date</DataTableItem>
+                  <DataTableItem>End date</DataTableItem>
+                  <DataTableItem>Difficulty</DataTableItem>
+                  <DataTableItem>Organizer</DataTableItem>
+                  <DataTableItem>Status</DataTableItem>
+                </DataTableRow>
+              </DataTableHeader>
+              <DataTableBody>{renderTournamentsRows()}</DataTableBody>
+            </DataTable>
+            <Text>{Pluralize(tournaments?.length || 0, 'item')}</Text>
+          </DataTableContainer>
+        </TournamentHistoryContainer>
+      </PageContainer>
     </Container>
   );
-}
+};
 
-export default userprofile;
+export default UserProfile;

@@ -20,7 +20,7 @@ const PopupBase = styled.div`
   height: auto;
   max-height: 70vh;
   margin-top: calc(100vh - 85vh - 20px);
-  border-radius: 50px;
+  border-radius: 10px;
   padding: 45px;
   border: 5px solid ${(props) => props.theme.colors.black};
   overflow: auto;
@@ -33,7 +33,6 @@ const PopupBase = styled.div`
 
   background-image: url(${bgDeco});
   background-size: cover;
-  
 `;
 
 const TitleContainer = styled.div`
@@ -92,7 +91,11 @@ const TaskScore = (props) => {
     averageCpu,
     points,
     onContinue,
-    onRetreat
+    onContinueLoading,
+    onContinueButtonVisible = true,
+    onRetreat,
+    onRetreatLoading,
+    onRetreatButtonVisible = true
   } = props;
   const theme = useTheme();
   return (
@@ -101,39 +104,55 @@ const TaskScore = (props) => {
         <TitleContainer>{title}</TitleContainer>
         <ContentBase>
           <StatusMarkContainer>
-            {passed === true  && (<PassedIcon color={theme.colors.LightGreen}/>)}
-            {passed === false  && (<FailedIcon color={theme.colors.Red}/>)}
+            {passed === true && <PassedIcon color={theme.colors.LightGreen} />}
+            {passed === false && <FailedIcon color={theme.colors.Red} />}
           </StatusMarkContainer>
           <InfoContainer>
-            <TaskResultTextContainer>{"Passed :"}</TaskResultTextContainer>
-            <TaskResultTextContainer>{passedCount}{"/"}{totalCount}</TaskResultTextContainer>
+            <TaskResultTextContainer>{'Passed :'}</TaskResultTextContainer>
+            <TaskResultTextContainer>
+              {passedCount}
+              {'/'}
+              {totalCount}
+            </TaskResultTextContainer>
           </InfoContainer>
           <InfoContainer>
-            <TaskResultTextContainer>{"Used Memory :"}</TaskResultTextContainer>
-            <TaskResultTextContainer>{usedMomory}{"Kb"}</TaskResultTextContainer>
+            <TaskResultTextContainer>{'Used Memory :'}</TaskResultTextContainer>
+            <TaskResultTextContainer>
+              {usedMomory}
+              {'Kb'}
+            </TaskResultTextContainer>
           </InfoContainer>
           <InfoContainer>
-            <TaskResultTextContainer>{"CPU time :"}</TaskResultTextContainer>
-            <TaskResultTextContainer>{averageCpu}{"s"}</TaskResultTextContainer>
+            <TaskResultTextContainer>{'CPU time :'}</TaskResultTextContainer>
+            <TaskResultTextContainer>
+              {averageCpu}
+              {'s'}
+            </TaskResultTextContainer>
           </InfoContainer>
           <InfoContainer>
-            <TaskResultTextContainer>{"Points :"}</TaskResultTextContainer>
+            <TaskResultTextContainer>{'Points :'}</TaskResultTextContainer>
             <TaskResultTextContainer>{points}</TaskResultTextContainer>
           </InfoContainer>
         </ContentBase>
         <ButtonContainer>
-        <OutlinedButton
-                  size='md'
-                  value="Retreat"
-                  color={theme.colors.Black}
-                  onClick={onRetreat}
-                />
-        <OutlinedButton
-                  size='md'
-                  value="Continue"
-                  color={theme.colors.Black}
-                  onClick={onContinue}
-                />
+          {onRetreatButtonVisible && (
+            <OutlinedButton
+              size='md'
+              value='Retreat'
+              color={theme.colors.Black}
+              onClick={onRetreat}
+              loading={onRetreatLoading}
+            />
+          )}
+          {onContinueButtonVisible && (
+            <OutlinedButton
+              size='md'
+              value='Continue'
+              color={theme.colors.Black}
+              onClick={onContinue}
+              loading={onContinueLoading}
+            />
+          )}
         </ButtonContainer>
       </PopupBase>
     </Container>

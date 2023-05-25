@@ -3,10 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import { Form, PasswordInput, TextInput } from '../../components';
 import { useSave, DataContext } from '../../utils';
+import background from '../../assets/backgrounds/background.png';
 
 const Container = styled.div`
+  background-image: url(${background});
   background-color: ${(props) => props.theme.colors.StrongGray};
   background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   overflow: auto;
   height: 92.7%;
 `;

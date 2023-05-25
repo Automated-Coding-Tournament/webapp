@@ -47,11 +47,15 @@ const useFind = (url) => {
     [fetchData]
   );
 
+  const clearResponse = useCallback(() => {
+    setResponse(null);
+  }, []);
+
   const clearError = useCallback(() => {
     setError(null);
   }, []);
 
-  return { response, loading, error, find, clearError };
+  return { response, loading, error, find, clearResponse, clearError };
 };
 
 export default useFind;

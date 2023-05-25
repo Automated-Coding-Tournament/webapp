@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { IconButton, MenuIcon, OutlinedButton } from '..';
+import { IconButton, LogoHorizontal, MenuIcon, OutlinedButton } from '..';
 import { useTheme } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { DataContext } from '../../utils';
 
 const TopBar = styled.div`
-  position: relative;
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: space-between;
   height: 7%;
@@ -28,12 +29,13 @@ const TopBar = styled.div`
       ${(props) => `${props.theme.colors.Black}4C`} 100%
     )
     2;
+  z-index: 2;
 `;
 
 const SideBar = styled.div`
   position: fixed;
-  top: 52px;
-  height: calc(100% - 54px);
+  top: 7%;
+  height: 92.7%;
   width: 300px;
 
   display: flex;
@@ -63,19 +65,28 @@ const SideBar = styled.div`
 `;
 
 const MenuButtonContainer = styled.div`
-  width='300px'
   position: relative;
   display: flex;
   align-items: center;
   padding-left: 8px;
+  width: 30%;
+`;
 
+const LogoContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 8px;
 `;
 
 const NavigationButtonsContainer = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-right: 8px;
-  width='300px'
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: 8px;
+  width: 30%;
 `;
 
 const SidebarButtonContainer = styled.div`
@@ -138,19 +149,26 @@ const NavigationBar = (props) => {
             <MenuIcon />
           </IconButton>
         </MenuButtonContainer>
+        <LogoContainer>
+          <LogoHorizontal height='85%' />
+        </LogoContainer>
         <NavigationButtonsContainer>
           {!token && location.pathname === '/' && (
             <>
-              <OutlinedButton
-                value='Sign Up'
-                color={theme.colors.PurpleBlue}
-                onClick={() => navigate('/register')}
-              />
-              <OutlinedButton
-                value='Sign In'
-                color={theme.colors.PurpleBlue}
-                onClick={() => navigate('/login')}
-              />
+              {location.pathname !== '/register' && (
+                <OutlinedButton
+                  value='Sign Up'
+                  color={theme.colors.PurpleBlue}
+                  onClick={() => navigate('/register')}
+                />
+              )}
+              {location.pathname !== '/login' && (
+                <OutlinedButton
+                  value='Sign In'
+                  color={theme.colors.PurpleBlue}
+                  onClick={() => navigate('/login')}
+                />
+              )}
             </>
           )}
           {location.pathname !== '/' && (
@@ -162,11 +180,13 @@ const NavigationBar = (props) => {
           )}
           {token && (
             <>
-              <OutlinedButton
-                value='Profile'
-                color={theme.colors.PurpleBlue}
-                onClick={() => navigate('/profile')}
-              />
+              {location.pathname !== '/profile' && (
+                <OutlinedButton
+                  value='Profile'
+                  color={theme.colors.PurpleBlue}
+                  onClick={() => navigate('/profile')}
+                />
+              )}
               <OutlinedButton
                 value='Log Out'
                 color={theme.colors.PurpleBlue}

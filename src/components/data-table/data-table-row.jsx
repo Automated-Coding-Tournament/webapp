@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 const TableRow = styled.tr`
   border-bottom: ${(props) =>
     `${props.borderSize || '1px'} solid${props.theme.colors.BlazeBlue}`};
-  border-radius: 4px;
+  border-radius: 10px;
   height: 48px;
   ${(props) =>
     props.hovarable &&

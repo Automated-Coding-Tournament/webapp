@@ -43,7 +43,7 @@ const SelectField = styled.select`
       props.errorMessage
         ? props.theme.colors.Red
         : props.theme.colors.DarkGray};
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 4px 8px 4px 8px;
   margin: 4px;
   outline: none;

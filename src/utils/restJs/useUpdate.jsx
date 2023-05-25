@@ -48,11 +48,15 @@ const useUpdate = (url) => {
     [updateData]
   );
 
+  const clearResponse = useCallback(() => {
+    setResponse(null);
+  }, []);
+
   const clearError = useCallback(() => {
     setError(null);
   }, []);
 
-  return { response, loading, error, update, clearError };
+  return { response, loading, error, update, clearResponse, clearError };
 };
 
 export default useUpdate;
