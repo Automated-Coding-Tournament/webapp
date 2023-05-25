@@ -1,9 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
-import { Form, FormGroup, PasswordInput, TextInput } from '../../components';
+import {
+  Form,
+  FormGroup,
+  PasswordInput,
+  Popup,
+  TextInput
+} from '../../components';
 import { useSave, DataContext } from '../../utils';
 import background from '../../assets/backgrounds/background.png';
+import { TermsPage } from '../terms_conditions';
 
 const Container = styled.div`
   background-image: url(${background});
@@ -55,6 +62,12 @@ const Registration = (props) => {
   const { response, loading, error, save, clearError } = useSave(
     `${dataContext.API}/user/register`
   );
+
+  const [termsAndConditionsopupOpen, setTermsAndConditionsPopup] =
+    useState(true);
+  const toggleTermsAndConditionsPopup = () => {
+    setTermsAndConditionsPopup(!termsAndConditionsopupOpen);
+  };
 
   useEffect(() => {
     if (response?.status === 201) {
@@ -289,6 +302,23 @@ const Registration = (props) => {
           />
         </FormGroup>
       </Form>
+      {termsAndConditionsopupOpen && (
+        <Popup
+          title='Terms & Conditions'
+          message='To continue with registration, you need to agree with our terms & conditions...'
+          closeButtonColor={theme.colors.PurpleBlue}
+          onClose={() => navigate('/')}
+          buttons={[
+            {
+              name: 'Agree',
+              color: theme.colors.PurpleBlue,
+              onClick: toggleTermsAndConditionsPopup
+            }
+          ]}
+        >
+          <TermsPage />
+        </Popup>
+      )}
     </Container>
   );
 };

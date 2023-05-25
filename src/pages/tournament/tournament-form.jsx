@@ -548,6 +548,14 @@ const TournamentForm = (props) => {
               onAdd={addTournamentTask}
               onRemove={removeTask}
               firstItemRequired={true}
+              addButtonVisible={
+                taskTitles?.filter(
+                  (task) =>
+                    !tasks
+                      ?.map((x) => x.title.value)
+                      .includes(task.value?.toString())
+                )?.length > 0
+              }
             >
               {tasks?.map((task, index) => (
                 <RepeaterItemContainer key={index}>
@@ -560,14 +568,13 @@ const TournamentForm = (props) => {
                     value={task.title.value}
                     onChange={handleChange}
                     errorMessage={task.title.errorMessage}
-                    options={taskTitles}
-                    // options={taskTitles?.map((task) => {
-                    //   if (
-                    //     !tasks?.map((x) => x.title.value).includes(task.value)
-                    //   ) {
-                    //     return task;
-                    //   }
-                    // })}
+                    options={taskTitles?.filter(
+                      (y) =>
+                        task.title.value === y.value?.toString() ||
+                        !tasks
+                          ?.map((x) => x.title.value)
+                          .includes(y.value?.toString())
+                    )}
                     required
                   />
                 </RepeaterItemContainer>

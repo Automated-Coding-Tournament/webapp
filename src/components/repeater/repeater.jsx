@@ -45,7 +45,8 @@ const Repeater = (props) => {
     addButtonText,
     onAdd,
     onRemove,
-    firstItemRequired
+    firstItemRequired,
+    addButtonVisible = true
   } = props;
   const theme = useTheme();
 
@@ -82,13 +83,15 @@ const Repeater = (props) => {
       ) : (
         <Label labelColor={labelColor}>No items added</Label>
       )}
-      <OutlinedButton
-        type='button'
-        value={addButtonText || 'Add Item'}
-        size='sm'
-        color={theme.colors.PurpleBlue}
-        onClick={AddItem}
-      />
+      {addButtonVisible && (
+        <OutlinedButton
+          type='button'
+          value={addButtonText || 'Add Item'}
+          size='sm'
+          color={theme.colors.PurpleBlue}
+          onClick={AddItem}
+        />
+      )}
     </RepeaterContainer>
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ContainedButton, OutlinedButton } from '../button';
-import background from '../../assets/backgrounds/background.png';
 
 const Container = styled.div`
   position: fixed;
@@ -20,7 +19,7 @@ const PopupBase = styled.div`
   margin-top: calc(100vh - 85vh - 20px);
   border-radius: 10px;
   padding: 10px;
-  border: 3px solid ${(props) => props.theme.colors.StrongGray};
+  border: 3px solid ${(props) => props.theme.colors.BlazeBlue};
   overflow: auto;
   text-align: center;
 
@@ -29,8 +28,7 @@ const PopupBase = styled.div`
   justify-content: center;
   gap: 10px;
 
-  background-image: url(${background});
-  background-color: ${(props) => props.theme.colors.StrongGray};
+  background: ${(props) => props.theme.colors.Black};
   background-size: cover;
   background-repeat: no-repeat;
   background-size: cover;
@@ -60,6 +58,13 @@ const MessageContainer = styled.div`
   color: ${(props) => props.theme.colors.White};
 `;
 
+const ChildrenContainer = styled.div`
+  position: relative;
+  overflow: auto;
+  display: flex;
+  padding: 4px;
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: left;
@@ -82,6 +87,7 @@ const Popup = (props) => {
       <PopupBase>
         <TitleContainer>{title}</TitleContainer>
         <MessageContainer>{message}</MessageContainer>
+        <ChildrenContainer>{props.children}</ChildrenContainer>
         <ButtonContainer>
           {buttons?.length > 0 &&
             buttons.map((item, key) =>
