@@ -1,0 +1,1 @@
+export { default as TournamentLeaderboard } from './tournament-leaderboard';
