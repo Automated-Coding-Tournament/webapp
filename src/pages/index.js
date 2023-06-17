@@ -8,3 +8,4 @@ export * from './task';
 export * from './tournament';
 export * from './leaderboard';
 export * from './terms_conditions';
+export * from './tournament-leaderboard';

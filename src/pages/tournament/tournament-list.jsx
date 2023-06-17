@@ -10,6 +10,7 @@ import {
   DataTableToolbar,
   DeleteIcon,
   EditIcon,
+  SearchIcon,
   IconButton,
   OutlinedButton,
   Popup
@@ -121,6 +122,10 @@ const TournamentList = () => {
     navigate(`/tournaments/${id}`);
   };
 
+  const handleTournamentLeaderboard = (id) => {
+    navigate(`/tournament_leaderboard/${id}`);
+  };
+
   const renderRows = () => {
     return tournaments?.map((tournament) => (
       <DataTableRow
@@ -144,6 +149,19 @@ const TournamentList = () => {
         <DataTableItem align='right'>
           {role && role !== dataContext.ROLES.USER && (
             <ActionButtonsContainer>
+              {tournament.status ===
+                dataContext.TOURNAMENT_STATUS.ENDED && (
+                  <IconButton
+                    onClick={() => {
+                      handleTournamentLeaderboard(tournament.id);
+                    }}
+                  >
+                    <SearchIcon
+                      color={
+                        theme.colors.WarmWhite
+                      }
+                    />
+                  </IconButton>)}
               <IconButton
                 disabled={
                   tournament.status !==
@@ -155,7 +173,7 @@ const TournamentList = () => {
                   color={
                     tournament.status !==
                       dataContext.TOURNAMENT_STATUS.REGISTRATION ||
-                    removeLoading
+                      removeLoading
                       ? theme.colors.StrongGray
                       : theme.colors.WarmWhite
                   }
@@ -168,14 +186,14 @@ const TournamentList = () => {
                 }}
                 disabled={
                   tournament.status !==
-                    dataContext.TOURNAMENT_STATUS.REGISTRATION || removeLoading
+                  dataContext.TOURNAMENT_STATUS.REGISTRATION || removeLoading
                 }
               >
                 <DeleteIcon
                   color={
                     tournament.status !==
                       dataContext.TOURNAMENT_STATUS.REGISTRATION ||
-                    removeLoading
+                      removeLoading
                       ? theme.colors.StrongGray
                       : theme.colors.WarmWhite
                   }

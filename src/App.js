@@ -15,7 +15,8 @@ import {
   TournamentList,
   Tournament,
   TermsPage,
-  TournamentForm
+  TournamentForm,
+  TournamentLeaderboard
 } from './pages';
 import { Leaderboard } from './pages/leaderboard';
 import { DataContext } from './utils';
@@ -146,6 +147,13 @@ const App = () => {
                 path='leaderboard'
                 element={<Leaderboard />}
               />
+              <Route
+                  path='tournament_leaderboard/:id'
+                  element={
+                    <TournamentLeaderboard
+                    />
+                  }
+                />
             </Routes>
             <Snackbar
               ref={snackbarRef}
