@@ -224,7 +224,7 @@ const UserInteface = () => {
           passed = {true}
           totalCount = {2}
           passedCount= {1}
-          usedMomory = {24534}
+          usedMemory = {24534}
           averageCpu = {23}
           points = {150}
           onRetreat={handleRetreat} 

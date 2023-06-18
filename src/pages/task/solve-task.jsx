@@ -390,11 +390,11 @@ const SolveTask = () => {
       </PageContainer>
       {taskScorePopUpOpen && (
         <TaskScore
-          title={'Task Completed!'}
+          title={participation?.passed ? 'Task Completed!' : 'Task Failed!'}
           passed={participation?.passed}
           totalCount={participation?.totalTestCases}
           passedCount={participation?.passedTestCases}
-          usedMomory={participation?.memoryInKilobytes}
+          usedMemory={participation?.memoryInKilobytes}
           averageCpu={participation?.averageCpuTime}
           points={participation?.points}
           onRetreat={handleRetreat}

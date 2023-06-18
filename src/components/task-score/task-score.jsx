@@ -87,7 +87,7 @@ const TaskScore = (props) => {
     passed,
     totalCount,
     passedCount,
-    usedMomory,
+    usedMemory,
     averageCpu,
     points,
     onContinue,
@@ -118,7 +118,7 @@ const TaskScore = (props) => {
           <InfoContainer>
             <TaskResultTextContainer>{'Used Memory :'}</TaskResultTextContainer>
             <TaskResultTextContainer>
-              {usedMomory}
+              {usedMemory}
               {'Kb'}
             </TaskResultTextContainer>
           </InfoContainer>
