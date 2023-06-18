@@ -185,7 +185,7 @@ const TournamentForm = (props) => {
   }, []);
 
   useEffect(() => {
-    if (findAllTasksResponse?.data) {
+    if (findAllTasksResponse?.data && findAllTasksResponse.data.length > 0) {
       const taskTitles = findAllTasksResponse.data.map((task) => ({
         text: task.title,
         value: task.id
@@ -256,7 +256,7 @@ const TournamentForm = (props) => {
   }, [findTournamentResponse]);
 
   useEffect(() => {
-    if (findTasksResponse?.data) {
+    if (findTasksResponse?.data && findTasksResponse.data.length > 0) {
       const tasksData = findTasksResponse.data;
       const formattedTasksData = tasksData.map((task) => ({
         title: {
@@ -265,6 +265,13 @@ const TournamentForm = (props) => {
         }
       }));
       setTasks(formattedTasksData);
+    } else {
+      setTasks([{
+        title: {
+          value: '',
+          errorMessage: ''
+        }
+      }]);
     }
   }, [findTasksResponse]);
 
@@ -554,7 +561,7 @@ const TournamentForm = (props) => {
                     !tasks
                       ?.map((x) => x.title.value)
                       .includes(task.value?.toString())
-                )?.length > 0
+                )?.length > 0 && taskTitles.length > tasks?.length
               }
             >
               {tasks?.map((task, index) => (

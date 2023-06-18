@@ -118,14 +118,14 @@ const TaskScore = (props) => {
           <InfoContainer>
             <TaskResultTextContainer>{'Used Memory :'}</TaskResultTextContainer>
             <TaskResultTextContainer>
-              {usedMemory}
+              {usedMemory?.toFixed(2)}
               {'Kb'}
             </TaskResultTextContainer>
           </InfoContainer>
           <InfoContainer>
             <TaskResultTextContainer>{'CPU time :'}</TaskResultTextContainer>
             <TaskResultTextContainer>
-              {averageCpu}
+              {averageCpu?.toFixed(2)}
               {'s'}
             </TaskResultTextContainer>
           </InfoContainer>
